@@ -17,27 +17,36 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: S
 
     internal fun parse(): Rates {
         if (body.isNotBlank()) {
-            try {
-                val inputStream = IOUtils.toInputStream(body.substring(body.indexOf("<")), "UTF-8")
-                val jaxbContext = JAXBContext.newInstance(Currencies::class.java)
-                val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
-                val currencies = jaxbUnmarshaller.unmarshal(inputStream) as Currencies
-                if (currencies.currencies != null && currencies.last_update != null) {
-                    return fillCurrencyRateList(currencies)
-                }
-            } catch (e: IOException) {
-                e.printStackTrace()
-            } catch (e: JAXBException) {
-                e.printStackTrace()
-            } catch (e: ParseException) {
-                e.printStackTrace()
+            val currencies = XmlBody(body).unmarshal()
+            if (currencies.currencies != null && currencies.last_update != null) {
+                return XmlRates(currencies).toRates()
             }
         }
         return Rates(date, arrayListOf<Rate>())
     }
+}
 
-    @Throws(ParseException::class)
-    private fun fillCurrencyRateList(currencies: com.natint.model.provider.boi.xml.mapping.Currencies): Rates {
+private class XmlBody(private val body: String) {
+    internal fun unmarshal(): Currencies = try {
+        val xmlBody = body.substring(body.indexOf("<"))
+        val inputStream = IOUtils.toInputStream(xmlBody, "UTF-8")
+        val jaxbContext = JAXBContext.newInstance(Currencies::class.java)
+        val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
+        jaxbUnmarshaller.unmarshal(inputStream) as Currencies
+    } catch (ex: Exception) {
+        val currencies = Currencies()
+        when (ex) {
+            is IOException, is JAXBException, is ParseException -> {
+                ex.printStackTrace()
+                currencies
+            }
+            else -> currencies
+        }
+    }
+}
+
+private class XmlRates(private val currencies: Currencies) {
+    internal fun toRates(): Rates {
         val xmlCurrencies = currencies.currencies
         val ratesList = xmlCurrencies
                 .filterNotNull()
