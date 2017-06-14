@@ -27,7 +27,7 @@ internal class BoiRatesRequest(
         val body = responseEntity?.body?.toLowerCase() ?: ""
         if (body.isEmpty() || body.hasErrors()) {
             attempts--
-            Thread.sleep(3000)
+            Thread.sleep(3000) //boi site tends to return error from time to time
             while (attempts > 0) {
                 return send()
             }
