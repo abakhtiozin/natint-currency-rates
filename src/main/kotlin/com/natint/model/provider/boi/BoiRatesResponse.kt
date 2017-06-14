@@ -13,25 +13,27 @@ import java.time.format.DateTimeFormatter
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException
 
-internal class BoiRatesResponse(private val body: String) {
+internal class BoiRatesResponse(private val date: LocalDate, private val body: String) {
 
     internal fun parse(): Rates {
-        try {
-            val inputStream = IOUtils.toInputStream(body.substring(body.indexOf("<")), "UTF-8")
-            val jaxbContext = JAXBContext.newInstance(Currencies::class.java)
-            val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
-            val currencies = jaxbUnmarshaller.unmarshal(inputStream) as Currencies
-            if (currencies.currencies != null && currencies.last_update != null) {
-                return fillCurrencyRateList(currencies)
+        if (body.isNotBlank()) {
+            try {
+                val inputStream = IOUtils.toInputStream(body.substring(body.indexOf("<")), "UTF-8")
+                val jaxbContext = JAXBContext.newInstance(Currencies::class.java)
+                val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
+                val currencies = jaxbUnmarshaller.unmarshal(inputStream) as Currencies
+                if (currencies.currencies != null && currencies.last_update != null) {
+                    return fillCurrencyRateList(currencies)
+                }
+            } catch (e: IOException) {
+                e.printStackTrace()
+            } catch (e: JAXBException) {
+                e.printStackTrace()
+            } catch (e: ParseException) {
+                e.printStackTrace()
             }
-        } catch (e: IOException) {
-            e.printStackTrace()
-        } catch (e: JAXBException) {
-            e.printStackTrace()
-        } catch (e: ParseException) {
-            e.printStackTrace()
         }
-        return Rates(LocalDate.now(), arrayListOf<Rate>())
+        return Rates(date, arrayListOf<Rate>())
     }
 
     @Throws(ParseException::class)
