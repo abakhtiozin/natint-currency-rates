@@ -9,11 +9,12 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.format.DateTimeParseException
 
+
 @ControllerAdvice
 class ExceptionController : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = *arrayOf(DateTimeParseException::class))
     fun handleConflict(ex: RuntimeException, request: WebRequest): ResponseEntity<Any> {
-        return handleExceptionInternal(ex, ex.toString(),
+        return handleExceptionInternal(ex, "$ex. Correct date format is dd-MM-yyyy",
                 HttpHeaders(), HttpStatus.CONFLICT, request)
     }
 }
