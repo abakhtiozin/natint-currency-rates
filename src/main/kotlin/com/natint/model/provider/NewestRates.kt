@@ -16,4 +16,3 @@ class NewestRates(private val ratesProvider: RatesProvider) : RatesProvider {
         return Rates(date, emptyList())
     }
 }
-
