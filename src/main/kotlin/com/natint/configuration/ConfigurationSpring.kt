@@ -5,12 +5,16 @@ import com.natint.model.provider.boi.BoiRates
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.*
 import org.springframework.core.env.Environment
+import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor
 import org.springframework.http.client.SimpleClientHttpRequestFactory
+import org.springframework.transaction.annotation.EnableTransactionManagement
 import org.springframework.web.client.RestTemplate
 
+
 @Configuration
+@EnableTransactionManagement
 @ComponentScan(basePackages = arrayOf("com.natint.*"))
-@PropertySource("classpath:config.properties")
+@PropertySource("classpath:application.properties")
 open class ConfigurationSpring {
 
     @Autowired
@@ -30,4 +34,6 @@ open class ConfigurationSpring {
     open fun restTemplate(): RestTemplate {
         return RestTemplate()
     }
+
+    @Bean open fun persistenceExceptionTranslationPostProcessor() = PersistenceExceptionTranslationPostProcessor()
 }

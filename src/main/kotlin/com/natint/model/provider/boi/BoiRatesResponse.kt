@@ -1,6 +1,7 @@
 package com.natint.model.provider.boi
 
-import com.natint.model.CurrencyCode.*
+import com.natint.model.CurrencyCode
+import com.natint.model.CurrencyCode.valueOf
 import com.natint.model.Rate
 import com.natint.model.Rates
 import com.natint.model.provider.boi.xml.mapping.Currencies
@@ -27,16 +28,20 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: S
 }
 
 private class XmlBody(private val body: String) {
+    private val encoding = "UTF-8"
+
     internal fun unmarshal(): Currencies = try {
-        val xmlBody = body.substring(body.indexOf("<"))
-        val inputStream = IOUtils.toInputStream(xmlBody, "UTF-8")
+        val xmlBody = body.substringAfter("¿")
+        val inputStream = IOUtils.toInputStream(xmlBody, encoding)
         val jaxbContext = JAXBContext.newInstance(Currencies::class.java)
         val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
         jaxbUnmarshaller.unmarshal(inputStream) as Currencies
     } catch (ex: Exception) {
         val currencies = Currencies()
         when (ex) {
-            is IOException, is JAXBException, is ParseException -> {
+            is IOException,
+            is JAXBException,
+            is ParseException -> {
                 ex.printStackTrace()
                 currencies
             }
@@ -50,19 +55,21 @@ private class XmlRates(private val currencies: Currencies) {
         val xmlCurrencies = currencies.currencies
         val ratesList = xmlCurrencies
                 .filterNotNull()
-                .filter { !it.currencycode.isNullOrBlank() && !it.rate.isNullOrBlank() }
+                .filter { (it.currencycode.isNullOrBlank() && it.rate.isNullOrBlank()).not() }
                 .filter { byRates(it) }
                 .map {
                     val code = it.currencycode.toUpperCase()
                     val rate = it.rate.toDouble()
                     Rate(valueOf(code), rate)
                 }
-
         val rateDate = getRateDate(currencies.last_update)
         return Rates(rateDate, ratesList)
     }
 
-    private fun byRates(it: Currency) = valueOf(it.currencycode.toUpperCase()) in listOf(USD, EUR, GBP)
+    private fun byRates(it: Currency): Boolean {
+        return it.currencycode.toUpperCase() in CurrencyCode.values()
+                .map { it.toString() }
+    }
 
     private fun getRateDate(last_update: String): LocalDate {
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
