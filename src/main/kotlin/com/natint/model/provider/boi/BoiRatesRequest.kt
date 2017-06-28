@@ -41,7 +41,5 @@ internal class BoiRatesRequest(
         return BoiRatesResponse(date, body)
     }
 
-    private fun String.hasNoRates(): Boolean {
-        return !this.contains("currencies", true)
-    }
+    private fun String.hasNoRates() = !this.contains("currencies", true)
 }
