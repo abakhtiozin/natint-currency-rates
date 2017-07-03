@@ -23,6 +23,7 @@ internal class BoiRatesRequest(
     }
 
     internal fun send(): BoiRatesResponse {
+        logger.info("Requesting rates from $url for date $date")
         val responseEntity: ResponseEntity<String>? = try {
             restTemplate.getForEntity(urlWithParams, String::class.java)
         } catch (e: ResourceAccessException) {
@@ -33,6 +34,7 @@ internal class BoiRatesRequest(
         }
         val body = responseEntity?.body?.toLowerCase() ?: ""
         if (body.isEmpty() || body.hasNoRates()) {
+            logger.info("No dates returned from $url for date $date, attempt #$attempts")
             attempts--
             while (attempts > 0) {
                 return send()
