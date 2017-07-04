@@ -39,7 +39,7 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: S
         internal fun toRates(): Rates {
             val xmlCurrencies = currencies.currencies
             val ratesList = xmlCurrencies
-                    .filterNotNull()
+                    .asSequence()
                     .filter { (it.currencycode.isNullOrBlank() && it.rate.isNullOrBlank()).not() }
                     .filter { byRates(it) }
                     .map {
@@ -47,6 +47,7 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: S
                         val rate = it.rate.toDouble()
                         Rate(valueOf(code), rate)
                     }
+                    .toList()
             val rateDate = getRateDate(currencies.last_update)
             if (rateDate == null || !date.isEqual(rateDate)) {
                 logger.info("INFO: Expected rate date is $date but get $rateDate in response")
