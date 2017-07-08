@@ -1,21 +1,25 @@
 package com.natint.database.service
 
+import com.beust.klaxon.JsonArray
 import com.natint.database.entity.CurrencyRateEntity
 import com.natint.database.entity.RateDateEntity
 import com.natint.database.repository.CurrencyRateRepository
 import com.natint.database.repository.RateDateRepository
 import com.natint.model.Rates
-import org.springframework.stereotype.Component
+import com.natint.model.json
+import org.springframework.data.domain.Sort
+import org.springframework.data.domain.Sort.Direction.DESC
+import org.springframework.stereotype.Service
 import java.sql.Timestamp
 import java.time.LocalDate
 
-@Component
+@Service
 open class RateService(
         private val currencyRateRepository: CurrencyRateRepository,
         private val rateDateRepository: RateDateRepository
 ) {
 
-    fun findByDate(date: LocalDate): Rates {
+    fun find(date: LocalDate): Rates {
         val timestamp = Timestamp.valueOf(date.atStartOfDay())
         val rateDateEntity = rateDateRepository.findByDate(timestamp)
         val currencyRateEntities = currencyRateRepository.findAllByRateDateEntity(rateDateEntity)
@@ -41,10 +45,28 @@ open class RateService(
         if (dbRateDate == null) {
             saveRates(timestamp, rates)
         } else {
-            val currencyRateEntities = currencyRateRepository.findAllByRateDateEntity(dbRateDate)
-            currencyRateRepository.delete(currencyRateEntities)
-            rateDateRepository.delete(dbRateDate)
+            delete(rates.date)
             saveRates(timestamp, rates)
         }
+    }
+
+    fun delete(date: LocalDate) {
+        val timestamp = Timestamp.valueOf(date.atStartOfDay())
+        val dbRateDate: RateDateEntity = rateDateRepository.findByDate(timestamp)
+        val currencyRateEntities = currencyRateRepository.findAllByRateDateEntity(dbRateDate)
+        currencyRateRepository.delete(currencyRateEntities)
+        rateDateRepository.delete(dbRateDate)
+    }
+
+    fun findAll(): List<JsonArray<Any?>> {
+        val all = currencyRateRepository.findAll(Sort(DESC, "id"))
+        return all.filter {
+            val rateDateEntity = it.rateDateEntity
+            val date = rateDateEntity?.date
+            date != null
+        }.groupBy {
+            val timestamp = it.rateDateEntity?.date
+            timestamp?.toLocalDateTime()?.toLocalDate()
+        }.map { Rates.from(it.key!!, it.value).json() }
     }
 }

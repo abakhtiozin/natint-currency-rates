@@ -4,7 +4,7 @@ import com.natint.model.Rates
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
-class NewestRates(private val ratesProvider: RatesProvider) : RatesProvider {
+class NewestRatesProvider(private val ratesProvider: RatesProvider) : RatesProvider {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     private var dayCounter: Long = 0

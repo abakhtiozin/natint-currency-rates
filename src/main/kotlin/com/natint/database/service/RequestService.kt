@@ -1,22 +1,22 @@
-package com.natint.model.listeners
+package com.natint.database.service
 
 import com.natint.database.entity.RequestLog
 import com.natint.database.entity.RequestType
 import com.natint.database.repository.RequestLogRepository
 import com.natint.database.repository.RequestTypeRepository
 import org.slf4j.LoggerFactory
-import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
 import java.sql.Timestamp
 import java.time.LocalDateTime
 
-@Component
-open class RequestListener(
-        val requestLogRepository: RequestLogRepository,
-        val requestTypeRepository: RequestTypeRepository
+@Service
+open class RequestService(
+        private val requestLogRepository: RequestLogRepository,
+        private val requestTypeRepository: RequestTypeRepository
 ) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
-    fun notify(requestType: RequestType) {
+    fun saveRequest(requestType: RequestType) {
         val requestTypeEntity = requestTypeRepository.findOne(requestType.id)
         val requestLog = requestLogRepository.save(
                 RequestLog(

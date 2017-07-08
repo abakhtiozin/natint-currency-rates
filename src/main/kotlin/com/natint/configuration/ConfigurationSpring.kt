@@ -1,7 +1,7 @@
 package com.natint.configuration
 
 import com.natint.database.service.RateService
-import com.natint.model.provider.DatabaseRates
+import com.natint.model.provider.DatabaseRatesProvider
 import com.natint.model.provider.RatesProvider
 import com.natint.model.provider.boi.BoiRates
 import org.springframework.beans.factory.annotation.Autowired
@@ -32,7 +32,7 @@ open class ConfigurationSpring {
         val restTemplate = restTemplate()
         (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setConnectTimeout(30000)
         val ratesProvider = BoiRates(restTemplate, url)
-        return DatabaseRates(ratesProvider, rateService)
+        return DatabaseRatesProvider(ratesProvider, rateService)
     }
 
     @Bean(name = arrayOf("restTemplate"))
