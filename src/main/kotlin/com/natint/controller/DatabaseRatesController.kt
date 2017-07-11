@@ -11,5 +11,5 @@ import org.springframework.web.bind.annotation.RestController
 class DatabaseRatesController(val rateService: RateService) {
 
     @RequestMapping("/getAll", method = arrayOf(GET), produces = arrayOf("application/json"))
-    @ResponseBody fun getNewestRates() = rateService.findAll()
+    @ResponseBody fun getAll() = rateService.findAll()
 }
