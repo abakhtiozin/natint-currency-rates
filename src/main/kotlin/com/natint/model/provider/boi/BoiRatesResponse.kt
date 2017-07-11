@@ -16,12 +16,12 @@ import java.time.format.DateTimeParseException
 import javax.xml.bind.JAXBContext
 import javax.xml.bind.JAXBException
 
-internal class BoiRatesResponse(private val date: LocalDate, private val body: String) {
+internal class BoiRatesResponse(private val date: LocalDate, private val body: Body) {
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     internal fun parse(): Rates {
-        if (body.isNotBlank()) {
-            val currencies = XmlBody(cleanRawBody()).unmarshal()
+        if (body.isNotEmpty()) {
+            val currencies = XmlBody(body.clean()).unmarshal()
             if (currencies.currencies != null && currencies.last_update != null) {
                 return XmlRates(currencies).toRates()
             }
@@ -31,9 +31,6 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: S
         logger.info("Response Body: $body")
         return Rates(date, arrayListOf<Rate>())
     }
-
-    private fun cleanRawBody() = body.replace(Regex("\\P{InBasic_Latin}"), "")
-
 
     private inner class XmlRates(private val currencies: Currencies) {
         internal fun toRates(): Rates {
@@ -73,11 +70,11 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: S
     }
 }
 
-private class XmlBody(private val xmlBody: String) {
+private class XmlBody(private val xmlBody: Body) {
     private val encoding = "UTF-8"
 
     internal fun unmarshal(): Currencies = try {
-        val inputStream = IOUtils.toInputStream(xmlBody, encoding)
+        val inputStream = IOUtils.toInputStream(xmlBody.toString(), encoding)
         val jaxbContext = JAXBContext.newInstance(Currencies::class.java)
         val jaxbUnmarshaller = jaxbContext.createUnmarshaller()
         jaxbUnmarshaller.unmarshal(inputStream) as Currencies

@@ -32,7 +32,8 @@ internal class BoiRatesRequest(
             Thread.sleep(3000) //boi site tends to return error from time to time
             null
         }
-        val body = responseEntity?.body?.toLowerCase() ?: ""
+        val responseBody = responseEntity?.body?.toLowerCase() ?: ""
+        val body = Body(responseBody)
         if (body.isEmpty() || body.hasNoRates()) {
             logger.info("No dates returned from $url for date $date, attempt #$attempts")
             attempts--
@@ -42,6 +43,4 @@ internal class BoiRatesRequest(
         }
         return BoiRatesResponse(date, body)
     }
-
-    private fun String.hasNoRates() = !this.contains("currencies", true)
 }
