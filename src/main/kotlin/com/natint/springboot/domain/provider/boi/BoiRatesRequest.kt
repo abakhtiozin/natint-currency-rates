@@ -1,5 +1,6 @@
 package com.natint.springboot.domain.provider.boi
 
+import com.natint.springboot.domain.DatePattern
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.ResourceAccessException
@@ -17,8 +18,8 @@ internal class BoiRatesRequest(
     private var attempts = 3
 
     private val urlWithParams = run {
-        val pattern = "yyyyMMdd"
-        val dateInString = date.format(DateTimeFormatter.ofPattern(pattern))
+        val pattern = DatePattern.BoiRequest
+        val dateInString = date.format(DateTimeFormatter.ofPattern(pattern.value))
         "$url$dateInString"
     }
 

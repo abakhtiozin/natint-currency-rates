@@ -1,6 +1,6 @@
 package com.natint.springboot.domain.provider
 
-import com.natint.springboot.domain.Rates
+import com.natint.springboot.domain.rates.Rates
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 

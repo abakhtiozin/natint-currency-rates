@@ -1,6 +1,6 @@
 package com.natint.springboot.service
 
-import com.natint.springboot.domain.Rates
+import com.natint.springboot.domain.rates.Rates
 import com.natint.springboot.entity.CurrencyRateEntity
 import com.natint.springboot.entity.RateDateEntity
 import com.natint.springboot.repository.CurrencyRateRepository

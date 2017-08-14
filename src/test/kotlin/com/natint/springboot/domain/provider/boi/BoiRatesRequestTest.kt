@@ -1,8 +1,8 @@
 package com.natint.springboot.domain.provider.boi
 
 import com.natint.springboot.domain.CurrencyCode.*
-import com.natint.springboot.domain.Rate
-import com.natint.springboot.domain.Rates
+import com.natint.springboot.domain.rates.Rate
+import com.natint.springboot.domain.rates.Rates
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.doThrow
 import com.nhaarman.mockito_kotlin.mock

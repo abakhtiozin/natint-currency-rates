@@ -1,7 +1,7 @@
 package com.natint.springboot.domain.provider.boi
 
-import com.natint.springboot.domain.Rates
 import com.natint.springboot.domain.provider.RatesProvider
+import com.natint.springboot.domain.rates.Rates
 import org.slf4j.LoggerFactory
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
