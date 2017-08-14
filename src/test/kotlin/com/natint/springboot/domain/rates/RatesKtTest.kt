@@ -1,9 +1,7 @@
-package com.natint.springboot.domain.provider
+package com.natint.springboot.domain.rates
 
-import com.natint.springboot.domain.CurrencyCode.*
-import com.natint.springboot.domain.rates.Rate
-import com.natint.springboot.domain.rates.Rates
-import com.natint.springboot.domain.rates.RatesAsJson
+import com.natint.springboot.domain.CurrencyCode.GBP
+import com.natint.springboot.domain.CurrencyCode.USD
 import com.natint.springboot.entity.CurrencyRateEntity
 import com.natint.springboot.entity.RateDateEntity
 import org.junit.jupiter.api.Assertions
@@ -13,43 +11,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 
 internal class RatesKtTest {
-
-    @Test fun toJsonSingleElement() {
-        val date = LocalDate.of(2017, 6, 5)
-        val listOfRate = listOf(
-                Rate(USD, 3.5)
-        )
-        val rates = Rates(date, listOfRate)
-        val expected = "[{\"date\":\"05-06-2017\"},{\"rates\":[{\"code\":\"USD\",\"rate\":\"3.5\"}]}]"
-        val actual = RatesAsJson(rates).represent().toJsonString()
-        Assertions.assertEquals(actual, expected)
-    }
-
-    @Test fun toJsonMultipleElements() {
-        val date = LocalDate.of(2017, 6, 5)
-        val listOfRate = listOf(
-                Rate(USD, 3.5),
-                Rate(GBP, 5.5),
-                Rate(EUR, 4.5)
-        )
-        val rates = Rates(date, listOfRate)
-        val expected = "[{\"date\":\"05-06-2017\"}," +
-                "{\"rates\":" +
-                "[{\"code\":\"USD\",\"rate\":\"3.5\"}," +
-                "{\"code\":\"GBP\",\"rate\":\"5.5\"}," +
-                "{\"code\":\"EUR\",\"rate\":\"4.5\"}]}]"
-        val actual = RatesAsJson(rates).represent().toJsonString()
-        Assertions.assertEquals(actual, expected)
-    }
-
-    @Test fun toJsonEmptyList() {
-        val date = LocalDate.of(2017, 6, 5)
-        val listOfRate = emptyList<Rate>()
-        val rates = Rates(date, listOfRate)
-        val expected = "[{\"date\":\"05-06-2017\"},{\"rates\":[]}]"
-        val actual = RatesAsJson(rates).represent().toJsonString()
-        Assertions.assertEquals(actual, expected)
-    }
 
     @Test fun isEmpty() {
         val rates = Rates(LocalDate.now(), emptyList<Rate>())
