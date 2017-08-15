@@ -29,8 +29,6 @@ internal class BoiRatesRequest(
             restTemplate.getForEntity(urlWithParams, String::class.java)
         } catch (e: ResourceAccessException) {
             logger.error("exception", e)
-            logger.info("wait a bit")
-            Thread.sleep(3000) //boi site tends to return error from time to time
             null
         }
         val responseBody = responseEntity?.body?.toLowerCase() ?: ""
