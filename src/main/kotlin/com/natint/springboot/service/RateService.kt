@@ -28,7 +28,7 @@ open class RateService(
         fun Rates.saveRates(timestamp: Timestamp?) {
             var rateDateEntity = RateDateEntity(date = timestamp)
             rateDateEntity = rateDateRepository.save(rateDateEntity)
-            val currencyRateEntities = this.rates.map {
+            val currencyRateEntities = this.values.map {
                 CurrencyRateEntity(
                         currencyCode = it.currencyCode,
                         rate = it.rate,

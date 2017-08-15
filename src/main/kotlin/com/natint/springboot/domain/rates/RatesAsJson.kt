@@ -15,7 +15,7 @@ class RatesAsJson(private val rates: Rates) : Representable {
                             "date" to formatter.format(date)
                     ),
                     obj(
-                            "rates" to array(rates.rates.map {
+                            "rates" to array(rates.values.map {
                                 obj(
                                         "code" to it.currencyCode.toString(),
                                         "rate" to it.rate.toString()
