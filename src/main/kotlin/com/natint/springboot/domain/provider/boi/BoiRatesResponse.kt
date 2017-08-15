@@ -9,7 +9,6 @@ import com.natint.springboot.domain.rates.Rates
 import org.apache.commons.io.IOUtils
 import org.slf4j.LoggerFactory
 import java.io.IOException
-import java.text.ParseException
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeParseException
@@ -72,6 +71,7 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: B
 
 private class XmlBody(private val xmlBody: Body) {
     private val encoding = "UTF-8"
+    private val logger = LoggerFactory.getLogger(this.javaClass)
 
     internal fun unmarshal(): Currencies = try {
         val inputStream = IOUtils.toInputStream(xmlBody.toString(), encoding)
@@ -82,9 +82,8 @@ private class XmlBody(private val xmlBody: Body) {
         val currencies = Currencies()
         when (ex) {
             is IOException,
-            is JAXBException,
-            is ParseException -> {
-                ex.printStackTrace()
+            is JAXBException -> {
+                logger.info("error occurred " + ex.toString())
                 currencies
             }
             else -> currencies
