@@ -1,6 +1,6 @@
 package com.natint.springboot.domain.provider.boi
 
-class Body(val body: String) {
+internal class Body(val body: String) {
     fun isEmpty() = body.isEmpty()
     fun isNotEmpty() = body.isNotEmpty()
     fun hasNoRates() = !body.contains("currencies", true)
