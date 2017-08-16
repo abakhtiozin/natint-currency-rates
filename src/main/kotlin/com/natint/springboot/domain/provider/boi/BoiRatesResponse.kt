@@ -21,11 +21,10 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: B
     internal fun parse(): Rates {
         if (body.isNotEmpty()) {
             val currencies = XmlBody(body.clean()).unmarshal()
-            if (currencies.currencies != null && currencies.last_update != null) {
+            if (currencies.getCurrencies().isNotEmpty()) {
                 return XmlRates(currencies).toRates()
             }
-            logger.info(" Error in Currencies: " + currencies.currencies +
-                    " or currency rate date " + currencies.last_update)
+            logger.info(" Error in Currencies: " + currencies.getCurrencies())
         }
         logger.info("Response Body: $body")
         return Rates(date, arrayListOf<Rate>())
@@ -33,18 +32,18 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: B
 
     private inner class XmlRates(private val currencies: Currencies) {
         internal fun toRates(): Rates {
-            val xmlCurrencies = currencies.currencies
+            val xmlCurrencies = currencies.getCurrencies()
             val ratesList = xmlCurrencies
                     .asSequence()
-                    .filter { (it.currencycode.isNullOrBlank() && it.rate.isNullOrBlank()).not() }
+                    .filter { (it.getCurrencycode().isNullOrBlank() && it.getRate().isNullOrBlank()).not() }
                     .filter { byRates(it) }
                     .map {
-                        val code = it.currencycode.toUpperCase()
-                        val rate = it.rate.toDouble()
+                        val code = it.getCurrencycode().toUpperCase()
+                        val rate = it.getRate().toDouble()
                         Rate(valueOf(code), rate)
                     }
                     .toList()
-            val rateDate = getRateDate(currencies.last_update)
+            val rateDate = getRateDate(currencies.getLast_update())
             if (rateDate == null || !date.isEqual(rateDate)) {
                 logger.info("INFO: Expected rate date is $date but get $rateDate in response")
                 return Rates(date, emptyList())
@@ -53,7 +52,7 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: B
         }
 
         private fun byRates(it: Currency): Boolean {
-            return it.currencycode.toUpperCase() in CurrencyCode.values()
+            return it.getCurrencycode().toUpperCase() in CurrencyCode.values()
                     .map { it.toString() }
         }
 
