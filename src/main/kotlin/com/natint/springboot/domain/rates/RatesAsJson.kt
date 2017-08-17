@@ -9,7 +9,7 @@ class RatesAsJson(private val rates: Rates) : Representable {
         val pattern = DatePattern.Application
         val formatter = DateTimeFormatter.ofPattern(pattern.value)
         val date = rates.date
-        val json: JsonArray<Any?> = com.beust.klaxon.json {
+        return com.beust.klaxon.json {
             array(
                     obj(
                             "date" to formatter.format(date)
@@ -24,6 +24,5 @@ class RatesAsJson(private val rates: Rates) : Representable {
                     )
             )
         }
-        return json
     }
 }

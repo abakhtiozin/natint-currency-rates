@@ -1,6 +1,8 @@
 package com.natint.springboot.domain.rates
 
-import com.natint.springboot.domain.CurrencyCode.*
+import com.natint.springboot.domain.CurrencyCode.EUR
+import com.natint.springboot.domain.CurrencyCode.GBP
+import com.natint.springboot.domain.CurrencyCode.USD
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDate

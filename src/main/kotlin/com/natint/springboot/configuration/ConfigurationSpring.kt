@@ -5,13 +5,16 @@ import com.natint.springboot.domain.provider.RatesProvider
 import com.natint.springboot.domain.provider.boi.BoiRates
 import com.natint.springboot.service.RateService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.context.annotation.*
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.ComponentScan
+import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.DependsOn
+import org.springframework.context.annotation.PropertySource
 import org.springframework.core.env.Environment
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor
 import org.springframework.http.client.SimpleClientHttpRequestFactory
 import org.springframework.transaction.annotation.EnableTransactionManagement
 import org.springframework.web.client.RestTemplate
-
 
 @Configuration
 @EnableTransactionManagement

@@ -23,7 +23,7 @@ internal class BoiRatesRequest(
         "$url$dateInString"
     }
 
-   internal fun send(): BoiRatesResponse {
+    internal fun send(): BoiRatesResponse {
         logger.info("Requesting rates from $urlWithParams")
         val responseEntity: ResponseEntity<String>? = try {
             restTemplate.getForEntity(urlWithParams, String::class.java)

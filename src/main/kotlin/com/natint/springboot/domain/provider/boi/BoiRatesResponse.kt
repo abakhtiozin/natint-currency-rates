@@ -27,7 +27,7 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: B
             logger.info(" Error in Currencies: " + currencies.getCurrencies())
         }
         logger.info("Response Body: $body")
-        return Rates(date, arrayListOf<Rate>())
+        return Rates(date, arrayListOf())
     }
 
     private inner class XmlRates(private val currencies: Currencies) {
@@ -35,7 +35,7 @@ internal class BoiRatesResponse(private val date: LocalDate, private val body: B
             val xmlCurrencies = currencies.getCurrencies()
             val ratesList = xmlCurrencies
                     .asSequence()
-                    .filter { (it.getCurrencycode().isNullOrBlank() && it.getRate().isNullOrBlank()).not() }
+                    .filter { it.getCurrencycode().isNotBlank() && it.getRate().isNotBlank() }
                     .filter { byRates(it) }
                     .map {
                         val code = it.getCurrencycode().toUpperCase()

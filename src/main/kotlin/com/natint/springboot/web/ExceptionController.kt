@@ -9,7 +9,6 @@ import org.springframework.web.context.request.WebRequest
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler
 import java.time.format.DateTimeParseException
 
-
 @ControllerAdvice
 class ExceptionController : ResponseEntityExceptionHandler() {
     @ExceptionHandler(value = *arrayOf(DateTimeParseException::class))

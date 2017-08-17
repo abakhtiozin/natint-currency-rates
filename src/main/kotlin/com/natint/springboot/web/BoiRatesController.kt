@@ -5,13 +5,17 @@ import com.natint.springboot.domain.DatePattern
 import com.natint.springboot.domain.provider.NewestRatesProvider
 import com.natint.springboot.domain.provider.RatesProvider
 import com.natint.springboot.domain.rates.RatesAsJson
-import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
+import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.ResponseBody
+import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/boi")
-class BoiRatesController(val ratesProvider: RatesProvider) {
+class BoiRatesController(private val ratesProvider: RatesProvider) {
 
     @GetMapping("/getNewestRates")
     @ResponseBody fun getNewestRates(): JsonArray<Any?> {
