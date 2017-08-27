@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
 class RatesAsJsonTest {
-    @Test fun toJsonSingleElement() {
+    @Test
+    fun toJsonSingleElement() {
         val date = LocalDate.of(2017, 6, 5)
         val listOfRate = listOf(
                 Rate(USD, 3.5)
@@ -16,12 +17,12 @@ class RatesAsJsonTest {
         val rates = Rates(date, listOfRate)
         val expected = "[{\"date\":\"05-06-2017\"},{\"rates\":[{\"code\":\"USD\",\"rate\":\"3.5\"}]}]"
         val representable = RatesAsJson(rates)
-        val represent = representable.represent()
-        val actual = represent.toJsonString()
+        val actual = representable.represent()
         Assertions.assertEquals(actual, expected)
     }
 
-    @Test fun toJsonMultipleElements() {
+    @Test
+    fun toJsonMultipleElements() {
         val date = LocalDate.of(2017, 6, 5)
         val listOfRate = listOf(
                 Rate(USD, 3.5),
@@ -35,19 +36,18 @@ class RatesAsJsonTest {
                 "{\"code\":\"GBP\",\"rate\":\"5.5\"}," +
                 "{\"code\":\"EUR\",\"rate\":\"4.5\"}]}]"
         val representable = RatesAsJson(rates)
-        val represent = representable.represent()
-        val actual = represent.toJsonString()
+        val actual = representable.represent()
         Assertions.assertEquals(actual, expected)
     }
 
-    @Test fun toJsonEmptyList() {
+    @Test
+    fun toJsonEmptyList() {
         val date = LocalDate.of(2017, 6, 5)
         val listOfRate = emptyList<Rate>()
         val rates = Rates(date, listOfRate)
         val expected = "[{\"date\":\"05-06-2017\"},{\"rates\":[]}]"
         val representable = RatesAsJson(rates)
-        val represent = representable.represent()
-        val actual = represent.toJsonString()
+        val actual = representable.represent()
         Assertions.assertEquals(actual, expected)
     }
 }
