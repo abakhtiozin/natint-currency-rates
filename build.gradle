@@ -117,11 +117,10 @@ dependencies {
 task publish(type: Exec) {
     applicationName = "currency-rate"
     executable "sh"
-    externalPort = "9001"
-    tomcatPort = "8080"
-    args "-c", "docker run --name=$applicationName --publish $externalPort:$tomcatPort --detach $group/currency-rate:1.0-SNAPSHOT"
+    args "-c", "docker run --name=$applicationName --publish 9001:8080 --detach natint-services/currency-rate:1.0-SNAPSHOT"
 }
 
 task image(type: Docker) {
     dependsOn clean, build, distDocker, publish
+    //docker logs belfastjug-sample-01-A --tail="0" --follow
 }
