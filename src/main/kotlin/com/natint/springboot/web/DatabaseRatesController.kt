@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/db")
-class DatabaseRatesController(val rateService: RateService) {
+class DatabaseRatesController(private val rateService: RateService) {
 
-    @GetMapping("/getAll")
+    @GetMapping("/rates")
     @ResponseBody fun getAll() = rateService.findAll()
 }
