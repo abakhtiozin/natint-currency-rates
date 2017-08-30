@@ -13,10 +13,10 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @RestController
-@RequestMapping("/boi")
+@RequestMapping("/boi/rates")
 class BoiRatesController(private val ratesProvider: RatesProvider) {
 
-    @GetMapping("/getNewestRates")
+    @GetMapping("/newest")
     @ResponseBody
     fun getNewestRates(): String {
         val provider = NewestRatesProvider(ratesProvider)
@@ -24,7 +24,7 @@ class BoiRatesController(private val ratesProvider: RatesProvider) {
         return RatesAsJson(rates).represent()
     }
 
-    @GetMapping("/getYesterdayRates")
+    @GetMapping("/yesterday")
     @ResponseBody
     fun getYesterdayRates(): String {
         val yesterday = LocalDate.now().minusDays(1)
@@ -32,7 +32,7 @@ class BoiRatesController(private val ratesProvider: RatesProvider) {
         return RatesAsJson(rates).represent()
     }
 
-    @GetMapping("/getRates/{requestDate}")
+    @GetMapping("/{requestDate}")
     @ResponseBody
     fun getRates(@PathVariable requestDate: String): String {
         val pattern = DatePattern.Application
