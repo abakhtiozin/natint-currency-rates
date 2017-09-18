@@ -15,7 +15,7 @@ class RatesAsJsonTest {
                 Rate(USD, 3.5)
         )
         val rates = Rates(date, listOfRate)
-        val expected = "[{\"date\":\"05-06-2017\"},{\"rates\":[{\"code\":\"USD\",\"rate\":\"3.5\"}]}]"
+        val expected = "{\"date\":\"05-06-2017\",\"rates\":[{\"code\":\"USD\",\"rate\":\"3.5\"}]}"
         val representable = RatesAsJson(rates)
         val actual = representable.represent()
         Assertions.assertEquals(actual, expected)
@@ -30,11 +30,12 @@ class RatesAsJsonTest {
                 Rate(EUR, 4.5)
         )
         val rates = Rates(date, listOfRate)
-        val expected = "[{\"date\":\"05-06-2017\"}," +
-                "{\"rates\":" +
-                "[{\"code\":\"USD\",\"rate\":\"3.5\"}," +
+        val expected = "{\"date\":\"05-06-2017\"," +
+                "\"rates\":[" +
+                "{\"code\":\"USD\",\"rate\":\"3.5\"}," +
                 "{\"code\":\"GBP\",\"rate\":\"5.5\"}," +
-                "{\"code\":\"EUR\",\"rate\":\"4.5\"}]}]"
+                "{\"code\":\"EUR\",\"rate\":\"4.5\"}" +
+                "]}"
         val representable = RatesAsJson(rates)
         val actual = representable.represent()
         Assertions.assertEquals(actual, expected)
@@ -45,7 +46,7 @@ class RatesAsJsonTest {
         val date = LocalDate.of(2017, 6, 5)
         val listOfRate = emptyList<Rate>()
         val rates = Rates(date, listOfRate)
-        val expected = "[{\"date\":\"05-06-2017\"},{\"rates\":[]}]"
+        val expected = "{\"date\":\"05-06-2017\",\"rates\":[]}"
         val representable = RatesAsJson(rates)
         val actual = representable.represent()
         Assertions.assertEquals(actual, expected)
