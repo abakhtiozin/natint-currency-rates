@@ -20,28 +20,28 @@ internal class BodyTest {
 
     @Test
     fun isEmpty() {
-        Assertions.assertTrue(Body("").isEmpty())
+        Assertions.assertTrue(ResponseBody("").isEmpty())
     }
 
     @Test
     fun isNotEmpty() {
-        Assertions.assertTrue(Body(response).isNotEmpty())
+        Assertions.assertTrue(ResponseBody(response).isNotEmpty())
     }
 
     @Test
     fun hasNoRates() {
         val source = "ï»¿<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n"
-        Assertions.assertTrue(Body(source).hasNoRates())
+        Assertions.assertTrue(ResponseBody(source).hasNoRates())
     }
 
     @Test
     fun hasRates() {
-        Assertions.assertFalse(Body(response).hasNoRates())
+        Assertions.assertFalse(ResponseBody(response).hasNoRates())
     }
 
     @Test
     fun clean() {
-        val body = Body(response).clean()
+        val body = ResponseBody(response).clean()
         val expected =
                 "<?xml version=\"1.0\" encoding=\"utf-8\" standalone=\"yes\"?>\n" +
                         "<currencies>\n" +
@@ -60,7 +60,7 @@ internal class BodyTest {
 
     @Test
     fun getBody() {
-        val body = Body(response)
+        val body = ResponseBody(response)
         Assertions.assertEquals(response, body.body)
     }
 }

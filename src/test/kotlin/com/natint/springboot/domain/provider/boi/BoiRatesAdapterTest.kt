@@ -1,18 +1,19 @@
 package com.natint.springboot.domain.provider.boi
 
 import com.natint.springboot.domain.CurrencyCode
+import com.natint.springboot.domain.provider.boi.response.BoiRatesResponse
 import com.natint.springboot.domain.rates.Rate
 import com.natint.springboot.domain.rates.Rates
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-internal class BoiRatesResponseTest {
+class BoiRatesAdapterTest {
     @Test
     fun blankBody() {
         val date = LocalDate.of(2017, 6, 5)
-        val ratesResponse = BoiRatesResponse(date, Body(""))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(""))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, emptyList<Rate>())
         Assertions.assertEquals(expected, actual)
     }
@@ -20,9 +21,9 @@ internal class BoiRatesResponseTest {
     @Test
     fun incorrectBody() {
         val date = LocalDate.of(2017, 6, 5)
-        val ratesResponse = BoiRatesResponse(date, Body("<?xml></xml>"))
-        val actual = ratesResponse.parse()
-        val expected = Rates(date, emptyList<Rate>())
+        val ratesResponse = BoiRatesResponse(date, ResponseBody("<?xml></xml>"))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
+        val expected = Rates(date, emptyList())
         Assertions.assertEquals(expected, actual)
     }
 
@@ -36,8 +37,8 @@ internal class BoiRatesResponseTest {
                 "  <error2>no exchange rate published for this date</error2>\n" +
                 "  <error3>attention: date should be in format yyyymmdd</error3>\n" +
                 "</currencies>"
-        val ratesResponse = BoiRatesResponse(date, Body(body))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(body))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, emptyList<Rate>())
         Assertions.assertEquals(expected, actual)
     }
@@ -81,8 +82,8 @@ internal class BoiRatesResponseTest {
                 "    <CHANGE>0.182</CHANGE>\n" +
                 "  </CURRENCY>\n" +
                 "</CURRENCIES>"
-        val ratesResponse = BoiRatesResponse(date, Body(body.toLowerCase()))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(body.toLowerCase()))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, listOf(
                 Rate(CurrencyCode.USD, 3.518),
                 Rate(CurrencyCode.GBP, 4.486),
@@ -107,8 +108,8 @@ internal class BoiRatesResponseTest {
                 "    <CHANGE>-0.509</CHANGE>\n" +
                 "  </CURRENCY>\n" +
                 "</CURRENCIES>"
-        val ratesResponse = BoiRatesResponse(date, Body(body.toLowerCase()))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(body.toLowerCase()))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, emptyList<Rate>())
         Assertions.assertEquals(expected, actual)
     }
@@ -128,8 +129,8 @@ internal class BoiRatesResponseTest {
                 "    <CHANGE>-0.509</CHANGE>\n" +
                 "  </CURRENCY>\n" +
                 "</CURRENCIES>"
-        val ratesResponse = BoiRatesResponse(date, Body(body.toLowerCase()))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(body.toLowerCase()))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, emptyList<Rate>())
         Assertions.assertEquals(expected, actual)
     }
@@ -141,8 +142,8 @@ internal class BoiRatesResponseTest {
                 "<CURRENCIES>\n" +
                 "  <LAST_UPDATE>2017-06-05</LAST_UPDATE>\n" +
                 "</CURRENCIES>"
-        val ratesResponse = BoiRatesResponse(date, Body(body.toLowerCase()))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(body.toLowerCase()))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, emptyList<Rate>())
         Assertions.assertEquals(expected, actual)
     }
@@ -162,9 +163,10 @@ internal class BoiRatesResponseTest {
                 "    <CHANGE>-0.509</CHANGE>\n" +
                 "  </CURRENCY>\n" +
                 "</CURRENCIES>"
-        val ratesResponse = BoiRatesResponse(date, Body(body.toLowerCase()))
-        val actual = ratesResponse.parse()
+        val ratesResponse = BoiRatesResponse(date, ResponseBody(body.toLowerCase()))
+        val actual = BoiRatesAdapter(ratesResponse).getRates()
         val expected = Rates(date, emptyList<Rate>())
         Assertions.assertEquals(expected, actual)
     }
+
 }
