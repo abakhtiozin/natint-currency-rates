@@ -12,18 +12,17 @@ open class DatabaseRatesProvider(
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun request(date: LocalDate): Rates {
-        val rates = ratesProvider.request(date)
-        if (rates.isEmpty()) {
-            logger.info("rates is empty")
-            val dbRates = rateService.find(date)
-            if (dbRates.isNotEmpty()) {
-                logger.info("get rates from db")
-                return dbRates
-            }
+        val dbRates = rateService.find(date)
+        return if (dbRates.isNotEmpty()) {
+            logger.info("get rates from db")
+            dbRates
         } else {
-            logger.info("save $rates to database")
-            rateService.save(rates)
+            val rates = ratesProvider.request(date)
+            if (rates.isNotEmpty()) {
+                logger.info("save $rates to database")
+                rateService.save(rates)
+            }
+            rates
         }
-        return rates
     }
 }
