@@ -1,8 +1,6 @@
 package com.natint.springboot.domain.provider.boi
 
-import com.natint.springboot.domain.CurrencyCode.EUR
-import com.natint.springboot.domain.CurrencyCode.GBP
-import com.natint.springboot.domain.CurrencyCode.USD
+import com.natint.springboot.domain.CurrencyCode.*
 import com.natint.springboot.domain.rates.Rate
 import com.natint.springboot.domain.rates.Rates
 import com.nhaarman.mockito_kotlin.doReturn
@@ -65,7 +63,7 @@ class BoiRatesRequestTest {
         val boi = BoiRatesRequest(restTemplate, date, url)
         /*When*/
         val boiRatesResponse = boi.send()
-        val actual = boiRatesResponse.parse()
+        val actual = BoiRatesAdapter(boiRatesResponse).getRates()
         /*Then*/
         val expected = Rates(date,
                 listOf(
@@ -88,7 +86,7 @@ class BoiRatesRequestTest {
         val boi = BoiRatesRequest(restTemplate, date, url)
         /*When*/
         val boiRatesResponse = boi.send()
-        val actual = boiRatesResponse.parse()
+        val actual = BoiRatesAdapter(boiRatesResponse).getRates()
         /*Then*/
         val expected = Rates(date, emptyList())
         Assertions.assertEquals(expected, actual)

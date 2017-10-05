@@ -1,6 +1,6 @@
 package com.natint.springboot.domain
 
-enum class DatePattern(val pattern: String) {
+enum class DatePattern(private val pattern: String) {
     Application("dd-MM-yyyy"),
     BoiResponse("yyyy-MM-dd"),
     BoiRequest("yyyyMMdd");

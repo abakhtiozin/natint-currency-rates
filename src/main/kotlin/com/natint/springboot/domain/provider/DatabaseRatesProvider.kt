@@ -5,7 +5,7 @@ import com.natint.springboot.service.RateService
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
-open class DatabaseRatesProvider(
+class DatabaseRatesProvider(
         private val ratesProvider: RatesProvider,
         private val rateService: RateService
 ) : RatesProvider {

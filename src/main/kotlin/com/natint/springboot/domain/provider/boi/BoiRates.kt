@@ -16,7 +16,8 @@ class BoiRates(
     override fun request(date: LocalDate): Rates {
         val request = BoiRatesRequest(restTemplate, date, url)
         val response = request.send()
-        val rates = response.parse()
+        val rates = BoiRatesAdapter(response).getRates()
+
         logger.info("Rates for date $date: $rates")
         return rates
     }

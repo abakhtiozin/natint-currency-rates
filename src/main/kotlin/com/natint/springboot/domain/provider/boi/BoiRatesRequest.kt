@@ -1,6 +1,7 @@
 package com.natint.springboot.domain.provider.boi
 
 import com.natint.springboot.domain.DatePattern
+import com.natint.springboot.domain.provider.boi.response.BoiRatesResponse
 import org.slf4j.LoggerFactory
 import org.springframework.http.ResponseEntity
 import org.springframework.web.client.ResourceAccessException
@@ -32,7 +33,7 @@ internal class BoiRatesRequest(
             null
         }
         val responseBody = responseEntity?.body?.toLowerCase() ?: ""
-        val body = Body(responseBody)
+        val body = ResponseBody(responseBody)
         if (body.isEmpty() || body.hasNoRates()) {
             logger.info("No dates returned from $url for date $date, attempt #$attempts")
             attempts--

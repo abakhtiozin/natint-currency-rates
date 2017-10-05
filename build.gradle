@@ -13,22 +13,26 @@ version '1.0-SNAPSHOT'
 
 
 buildscript {
+    ext.kotlin_version = '1.1.4-3'
+    ext.h2version = '1.4.196'
+
     ext {
-        kotlinVersion = '1.1.4-2'
         springVersion = '1.5.7.RELEASE'
         gradleDockerVersion = '1.2'
-        h2version = '1.4.196'
+        sourceCompatibility = 1.8
     }
     repositories {
         mavenCentral()
     }
+
     dependencies {
-        classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.0-RC2"
+        classpath "org.junit.platform:junit-platform-gradle-plugin:1.0.0"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$springVersion"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
-        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlinVersion"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "org.jetbrains.kotlin:kotlin-noarg:$kotlin_version"
         classpath "com.h2database:h2:$h2version"
         classpath "se.transmode.gradle:gradle-docker:1.2"
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
 
@@ -47,6 +51,9 @@ docker {
 
 compileKotlin {
     mainClassName = "com.natint.springboot.AppKt"
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
 
 jar {
@@ -128,4 +135,9 @@ task publish(type: Exec) {
 task image(type: Docker) {
     dependsOn clean, build, distDocker, publish
     //docker logs belfastjug-sample-01-A --tail="0" --follow
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }
