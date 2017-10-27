@@ -32,15 +32,15 @@ open class ConfigurationSpring {
     @DependsOn(value = "restTemplate")
     open fun boiRates(): RatesProvider {
         val url = env.getProperty("provider.boi.url")
-        val restTemplate = restTemplate()
-        (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setConnectTimeout(30000)
-        val ratesProvider = BoiRates(restTemplate, url)
+        val ratesProvider = BoiRates(restTemplate(), url)
         return DatabaseRatesProvider(ratesProvider, rateService)
     }
 
     @Bean(name = arrayOf("restTemplate"))
     open fun restTemplate(): RestTemplate {
-        return RestTemplate()
+        val restTemplate = RestTemplate()
+        (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setConnectTimeout(30000)
+        return restTemplate
     }
 
     @Bean open fun persistenceExceptionTranslationPostProcessor() = PersistenceExceptionTranslationPostProcessor()
