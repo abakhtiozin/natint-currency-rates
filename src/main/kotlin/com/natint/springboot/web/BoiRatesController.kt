@@ -1,6 +1,6 @@
 package com.natint.springboot.web
 
-import com.natint.springboot.domain.DatePattern
+import com.natint.springboot.domain.RequestDate
 import com.natint.springboot.domain.provider.NewestRatesProvider
 import com.natint.springboot.domain.provider.RatesProvider
 import com.natint.springboot.domain.rates.RatesAsJson
@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.ResponseBody
 import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 @RestController
 @RequestMapping("/boi/rates")
@@ -34,11 +33,8 @@ class BoiRatesController(private val ratesProvider: RatesProvider) {
 
     @GetMapping("/{requestDate}")
     @ResponseBody
-    fun getRates(@PathVariable requestDate: String): String {
-        val pattern = DatePattern.Application
-        val formatter = DateTimeFormatter.ofPattern(pattern.value)
-        val date = LocalDate.parse(requestDate, formatter)
-        val rates = ratesProvider.request(date)
+    fun getRates(@PathVariable requestDate: RequestDate): String {
+        val rates = ratesProvider.request(requestDate.date)
         return RatesAsJson(rates).represent()
     }
 }
