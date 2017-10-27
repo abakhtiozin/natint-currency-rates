@@ -4,7 +4,7 @@ import com.natint.springboot.domain.CurrencyCode
 import com.natint.springboot.entity.CurrencyRateEntity
 import java.time.LocalDate
 
-data class Rates(val date: LocalDate, val values: List<Rate>) {
+data class Rates(val date: LocalDate, val values: List<Rate> = emptyList()) {
     fun isEmpty() = this.values.isEmpty()
     fun isNotEmpty() = this.values.isNotEmpty()
 
