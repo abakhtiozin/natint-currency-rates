@@ -3,6 +3,8 @@ package com.natint.springboot.domain.provider.boi
 import com.natint.springboot.domain.CurrencyCode
 import com.natint.springboot.domain.rates.Rate
 import com.natint.springboot.domain.rates.Rates
+import com.natint.springboot.entity.UrlEntity
+import com.natint.springboot.service.UrlService
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.jupiter.api.Assertions
@@ -13,6 +15,7 @@ import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 
 internal class BoiRatesTest {
+
     @Test
     fun request() {
         val url = "test/"
@@ -57,7 +60,10 @@ internal class BoiRatesTest {
         val restTemplate = mock<RestTemplate> {
             on { getForEntity("${url}20170605", String::class.java) } doReturn responseEntity
         }
-        val boiRates = BoiRates(restTemplate, url)
+        val urlService = mock<UrlService> {
+            on { get() } doReturn UrlEntity(url = url)
+        }
+        val boiRates = BoiRates(restTemplate, urlService)
         val actual = boiRates.request(date)
         val expected = Rates(date,
                 listOf(

@@ -4,6 +4,8 @@ import com.natint.springboot.domain.CurrencyCode
 import com.natint.springboot.domain.provider.boi.BoiRates
 import com.natint.springboot.domain.rates.Rate
 import com.natint.springboot.domain.rates.Rates
+import com.natint.springboot.entity.UrlEntity
+import com.natint.springboot.service.UrlService
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
 import org.junit.jupiter.api.Assertions
@@ -58,7 +60,10 @@ internal class NewestRatesProviderTest {
         val restTemplate = mock<RestTemplate> {
             on { getForEntity("${url}20170605", String::class.java) } doReturn responseEntity
         }
-        val boiRates = BoiRates(restTemplate, url)
+        val urlService = mock<UrlService> {
+            on { get() } doReturn UrlEntity(url = url)
+        }
+        val boiRates = BoiRates(restTemplate, urlService)
         val newestRatesProvider = NewestRatesProvider(boiRates)
         val actual = newestRatesProvider.request(date)
         val expected = Rates(date,
@@ -120,7 +125,10 @@ internal class NewestRatesProviderTest {
             on { getForEntity("${url}20170606", String::class.java) } doReturn responseEntity
             on { getForEntity("${url}20170605", String::class.java) } doReturn yesterdayResponseEntity
         }
-        val boiRates = BoiRates(restTemplate, url)
+        val urlService = mock<UrlService> {
+            on { get() } doReturn UrlEntity(url = url)
+        }
+        val boiRates = BoiRates(restTemplate, urlService)
         val newestRatesProvider = NewestRatesProvider(boiRates)
         val actual = newestRatesProvider.request(date)
         val expected = Rates(LocalDate.of(2017, 6, 5),
@@ -151,7 +159,10 @@ internal class NewestRatesProviderTest {
             on { getForEntity("${url}20170531", String::class.java) } doReturn responseEntity
             on { getForEntity("${url}20170530", String::class.java) } doReturn responseEntity
         }
-        val boiRates = BoiRates(restTemplate, url)
+        val urlService = mock<UrlService> {
+            on { get() } doReturn UrlEntity(url = url)
+        }
+        val boiRates = BoiRates(restTemplate, urlService)
         val newestRatesProvider = NewestRatesProvider(boiRates)
         val actual = newestRatesProvider.request(date)
         val expected = Rates(LocalDate.of(2017, 5, 30), emptyList())

@@ -12,12 +12,14 @@ import java.time.LocalDateTime
 
 internal class RatesKtTest {
 
-    @Test fun isEmpty() {
+    @Test
+    fun isEmpty() {
         val rates = Rates(LocalDate.now(), emptyList<Rate>())
         Assertions.assertTrue(rates.isEmpty())
     }
 
-    @Test fun isNotEmpty() {
+    @Test
+    fun isNotEmpty() {
         val date = LocalDate.of(2017, 6, 5)
         val listOfRate = listOf(
                 Rate(USD, 3.5),
@@ -27,7 +29,8 @@ internal class RatesKtTest {
         Assertions.assertTrue(rates.isNotEmpty())
     }
 
-    @Test fun fromEntity() {
+    @Test
+    fun fromEntity() {
         val date = LocalDateTime.of(2017, 6, 5, 0, 0)
         val rateDateEntity = RateDateEntity(1, Timestamp.valueOf(date))
         val localDate = date.toLocalDate()
@@ -51,7 +54,8 @@ internal class RatesKtTest {
         Assertions.assertEquals(expected, actual)
     }
 
-    @Test fun fromEmptyEntity() {
+    @Test
+    fun fromEmptyEntity() {
         val date = LocalDate.of(2017, 6, 5)
         val actual = Rates.from(date, emptyList())
         val expected = Rates(date, emptyList())

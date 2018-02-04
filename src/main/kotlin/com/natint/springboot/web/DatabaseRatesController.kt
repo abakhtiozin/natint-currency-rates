@@ -11,5 +11,6 @@ import org.springframework.web.bind.annotation.RestController
 class DatabaseRatesController(private val rateService: RateService) {
 
     @GetMapping("/rates")
-    @ResponseBody fun getAll() = rateService.findAll()
+    @ResponseBody
+    fun getAll() = rateService.findAll()
 }
