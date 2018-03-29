@@ -20,7 +20,7 @@ apply plugin: 'docker'
 apply plugin: 'application'
 
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.2.30'
     ext.h2version = '1.4.196'
 
     ext {
@@ -101,7 +101,6 @@ bootRun {
 h2version = '1.4.196'
 sourceCompatibility = 1.8
 springVersion = '1.5.7.RELEASE'
-kotlinVersion = '1.1.51'
 junitPlatformPlugin = '1.0.0-RC2'
 jupiterVersion = '5.0.0-RC2'
 xmlBindVersion = "0.1.9"
@@ -133,7 +132,7 @@ task publish(type: Exec) {
 }
 
 task image(type: Docker) {
-    dependsOn clean, build, distDocker, publish
+    dependsOn clean, build, test, check, distDocker, publish
     //docker logs belfastjug-sample-01-A --tail="0" --follow
 }
 compileTestKotlin {
