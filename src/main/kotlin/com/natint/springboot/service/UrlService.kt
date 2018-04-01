@@ -13,11 +13,8 @@ open class UrlService(private val urlRepository: UrlRepository) {
     }
 
     @Throws(UrlNotSetException::class)
-    open fun get(): UrlEntity? {
-        return try {
-            urlRepository.getOne(1)
-        } catch (e: Exception) {
-            throw UrlNotSetException()
-        }
+    open fun get(): String {
+        val urlEntity = urlRepository.getOne(1)
+        return urlEntity.url ?: throw UrlNotSetException()
     }
 }

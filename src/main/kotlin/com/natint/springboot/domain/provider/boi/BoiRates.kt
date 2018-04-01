@@ -15,11 +15,10 @@ class BoiRates(
     private val logger = LoggerFactory.getLogger(this.javaClass)
 
     override fun request(date: LocalDate): Rates {
-        val urlEntity = urlService.get()
-        val request = BoiRatesRequest(restTemplate, date, urlEntity?.url!!)
+        val url = urlService.get()
+        val request = BoiRatesRequest(restTemplate, date, url)
         val response = request.send()
         val rates = BoiRatesAdapter(response).getRates()
-
         logger.info("Rates for date $date: $rates")
         return rates
     }

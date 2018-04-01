@@ -18,7 +18,7 @@ import org.springframework.web.client.RestTemplate
 
 @Configuration
 @EnableTransactionManagement
-@ComponentScan(basePackages = arrayOf("com.natint.*"))
+@ComponentScan(basePackages = ["com.natint.*"])
 @PropertySource("classpath:application.properties")
 open class ConfigurationSpring {
 
@@ -27,17 +27,18 @@ open class ConfigurationSpring {
     @Autowired
     private lateinit var urlService: UrlService
 
-    @Bean(name = arrayOf("boiRates"))
-    @DependsOn(value = "restTemplate")
+    @Bean(name = ["boiRates"])
+    @DependsOn(value = ["restTemplate"])
     open fun boiRates(): RatesProvider {
         val ratesProvider = BoiRates(restTemplate(), urlService)
         return DatabaseRatesProvider(ratesProvider, rateService)
     }
 
-    @Bean(name = arrayOf("restTemplate"))
+    @Bean(name = ["restTemplate"])
     open fun restTemplate(): RestTemplate {
         val restTemplate = RestTemplate()
-        (restTemplate.requestFactory as SimpleClientHttpRequestFactory).setConnectTimeout(30000)
+        val factory = restTemplate.requestFactory as SimpleClientHttpRequestFactory
+        factory.setConnectTimeout(30000)
         return restTemplate
     }
 

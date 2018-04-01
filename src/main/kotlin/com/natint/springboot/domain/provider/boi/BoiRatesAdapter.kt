@@ -13,7 +13,8 @@ internal class BoiRatesAdapter(boiRatesResponse: BoiRatesResponse) {
 
     internal fun getRates(): Rates {
         if (body.isNotEmpty()) {
-            val currencies = XmlBody(body.clean()).unmarshal()
+            val xmlBody = XmlBody(body.clean())
+            val currencies = xmlBody.unmarshal()
             if (currencies.getCurrencies().isNotEmpty()) {
                 return XmlRates(currencies, date).toRates()
             }

@@ -3,7 +3,6 @@ package com.natint.springboot.domain.provider.boi
 import com.natint.springboot.domain.CurrencyCode
 import com.natint.springboot.domain.rates.Rate
 import com.natint.springboot.domain.rates.Rates
-import com.natint.springboot.entity.UrlEntity
 import com.natint.springboot.service.UrlService
 import com.nhaarman.mockito_kotlin.doReturn
 import com.nhaarman.mockito_kotlin.mock
@@ -61,7 +60,7 @@ internal class BoiRatesTest {
             on { getForEntity("${url}20170605", String::class.java) } doReturn responseEntity
         }
         val urlService = mock<UrlService> {
-            on { get() } doReturn UrlEntity(url = url)
+            on { get() } doReturn url
         }
         val boiRates = BoiRates(restTemplate, urlService)
         val actual = boiRates.request(date)

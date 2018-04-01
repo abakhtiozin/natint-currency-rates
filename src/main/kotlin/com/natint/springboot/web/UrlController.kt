@@ -22,6 +22,6 @@ class UrlController(private val urlService: UrlService) {
     @ResponseBody
     @Throws(UrlNotSetException::class)
     fun get(): String? {
-        return urlService.get()?.url
+        return urlService.get()
     }
 }
