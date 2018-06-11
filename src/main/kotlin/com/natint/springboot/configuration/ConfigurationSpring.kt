@@ -3,8 +3,9 @@ package com.natint.springboot.configuration
 import com.natint.springboot.domain.provider.DatabaseRatesProvider
 import com.natint.springboot.domain.provider.RatesProvider
 import com.natint.springboot.domain.provider.boi.BoiRates
+import com.natint.springboot.domain.provider.nbu.NbuRates
+import com.natint.springboot.service.ProviderService
 import com.natint.springboot.service.RateService
-import com.natint.springboot.service.UrlService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.ComponentScan
@@ -25,12 +26,21 @@ open class ConfigurationSpring {
     @Autowired
     private lateinit var rateService: RateService
     @Autowired
-    private lateinit var urlService: UrlService
+    private lateinit var providerService: ProviderService
 
     @Bean(name = ["boiRates"])
     @DependsOn(value = ["restTemplate"])
     open fun boiRates(): RatesProvider {
-        val ratesProvider = BoiRates(restTemplate(), urlService)
+        val provider = providerService.get("boi")
+        val ratesProvider = BoiRates(restTemplate(), provider)
+        return DatabaseRatesProvider(ratesProvider, rateService)
+    }
+
+    @Bean(name = ["nbuRates"])
+    @DependsOn(value = ["restTemplate"])
+    open fun nbuRates(): RatesProvider {
+        val provider = providerService.get("nbu")
+        val ratesProvider = NbuRates(restTemplate(), provider)
         return DatabaseRatesProvider(ratesProvider, rateService)
     }
 
@@ -42,5 +52,8 @@ open class ConfigurationSpring {
         return restTemplate
     }
 
-    @Bean open fun persistenceExceptionTranslationPostProcessor() = PersistenceExceptionTranslationPostProcessor()
+    @Bean
+    open fun persistenceExceptionTranslationPostProcessor(): PersistenceExceptionTranslationPostProcessor {
+        return PersistenceExceptionTranslationPostProcessor()
+    }
 }

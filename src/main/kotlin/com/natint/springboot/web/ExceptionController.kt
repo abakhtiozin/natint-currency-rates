@@ -12,15 +12,21 @@ import java.time.format.DateTimeParseException
 
 @ControllerAdvice("com.natint.springboot")
 class ExceptionController : ResponseEntityExceptionHandler() {
-    @ExceptionHandler(value = *arrayOf(DateTimeParseException::class))
+    @ExceptionHandler(value = [(DateTimeParseException::class)])
     fun dateFormatConflict(ex: RuntimeException, request: WebRequest): ResponseEntity<Any> {
         return handleExceptionInternal(ex, "$ex. Correct date format is dd-MM-yyyy",
                 HttpHeaders(), HttpStatus.CONFLICT, request)
     }
 
-    @ExceptionHandler(value = *arrayOf(UrlNotSetException::class))
+    @ExceptionHandler(value = [(UrlNotSetException::class)])
     fun urlNotSetConflict(ex: UrlNotSetException, request: WebRequest): ResponseEntity<Any> {
         return handleExceptionInternal(ex, "currency provider url not set",
+                HttpHeaders(), HttpStatus.CONFLICT, request)
+    }
+
+    @ExceptionHandler(value = [(Exception::class)])
+    fun any(ex: Exception, request: WebRequest): ResponseEntity<Any> {
+        return handleExceptionInternal(ex, "exception",
                 HttpHeaders(), HttpStatus.CONFLICT, request)
     }
 }

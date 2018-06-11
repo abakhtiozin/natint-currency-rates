@@ -1,6 +1,8 @@
 package com.natint.springboot.repository
 
+import com.natint.springboot.entity.CurrencyEntity
 import com.natint.springboot.entity.CurrencyRateEntity
+import com.natint.springboot.entity.ProviderEntity
 import com.natint.springboot.entity.RateDateEntity
 import com.natint.springboot.entity.UrlEntity
 import org.springframework.data.jpa.repository.JpaRepository
@@ -15,3 +17,7 @@ interface CurrencyRateRepository : JpaRepository<CurrencyRateEntity, Long> {
 }
 
 interface UrlRepository : JpaRepository<UrlEntity, Long>
+interface CurrencyRepository : JpaRepository<CurrencyEntity, Long>
+interface ProviderRepository : JpaRepository<ProviderEntity, Long> {
+    fun findByName(name: String): ProviderEntity
+}

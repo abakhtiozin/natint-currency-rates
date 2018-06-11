@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RestController
 import java.time.LocalDate
 
 @RestController
-@RequestMapping("/boi/rates")
-class BoiRatesController(@Qualifier("boiRates") private val ratesProvider: RatesProvider) {
+@RequestMapping("/nbu/rates")
+class NbuRatesController(@Qualifier("nbuRates") private val ratesProvider: RatesProvider) {
 
     @GetMapping("/newest")
     @ResponseBody

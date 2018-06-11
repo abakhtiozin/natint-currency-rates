@@ -1,4 +1,4 @@
-package com.natint.springboot.domain.provider.boi
+package com.natint.springboot.domain.provider.nbu
 
 import com.natint.springboot.domain.provider.RatesProvider
 import com.natint.springboot.domain.rates.Rates
@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import org.springframework.web.client.RestTemplate
 import java.time.LocalDate
 
-class BoiRates(
+class NbuRates(
         private val restTemplate: RestTemplate,
         private val providerEntity: ProviderEntity
 ) : RatesProvider {
@@ -17,9 +17,8 @@ class BoiRates(
     override fun request(date: LocalDate): Rates {
         val urlEntity = providerEntity.urlEntity
         val url = urlEntity?.url
-        val request = BoiRatesRequest(restTemplate, date, url!!)
-        val response = request.send()
-        val rates = BoiRatesAdapter(response).getRates()
+        val ratesAdapter = NbuRatesAdapter(NbuApi(restTemplate, url!!))
+        val rates = ratesAdapter.request(date)
         logger.info("Rates for date $date: $rates")
         return rates
     }

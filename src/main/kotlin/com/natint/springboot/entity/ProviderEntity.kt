@@ -10,18 +10,18 @@ import javax.persistence.ManyToOne
 import javax.persistence.Table
 
 @Entity
-@Table(name = "currency_rate")
-data class CurrencyRateEntity(
+@Table(name = "provider")
+data class ProviderEntity(
         @Id
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         @Column(name = "id", length = 6, nullable = false)
         var id: Long? = null,
+        @Column(name = "name")
+        var name: String? = null,
         @ManyToOne
-        @JoinColumn(name = "currency_id")
-        var currencyEntity: CurrencyEntity?,
-        @Column(name = "rate")
-        var rate: Double,
+        @JoinColumn(name = "currency_code_id")
+        var currency: CurrencyEntity? = null,
         @ManyToOne
-        @JoinColumn(name = "rate_date_id")
-        var rateDateEntity: RateDateEntity? = null
+        @JoinColumn(name = "url_id")
+        var urlEntity: UrlEntity? = null
 )

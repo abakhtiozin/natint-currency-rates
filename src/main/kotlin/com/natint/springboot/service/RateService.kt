@@ -30,7 +30,7 @@ open class RateService(
             rateDateEntity = rateDateRepository.save(rateDateEntity)
             val currencyRateEntities = this.values.map {
                 CurrencyRateEntity(
-                        currencyCode = it.currencyCode,
+                        currencyEntity =
                         rate = it.rate,
                         rateDateEntity = rateDateEntity
                 )
