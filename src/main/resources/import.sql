@@ -1,1 +1,1 @@
-INSERT INTO url (url) VALUES ('http://www.boi.org.il/currency.xml?date=');
+INSERT INTO url (url) VALUES ('https://www.boi.org.il/currency.xml?date=');
