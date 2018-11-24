@@ -1,20 +1,36 @@
- pipeline {
+pipeline {
     agent any
     stages {
-        stage('Init') {
+        stage('Clean') {
             steps {
-                echo "Testing..."
+                echo "Cleaning ..."
+                sh './gradlew clean'
+            }
+        }
+        stage('Tests') {
+            steps {
+                echo "Running tests..."
+                sh './gradlew test'
+                junit 'build/test-results/junit-platform/*.xml'
             }
         }
         stage('Build') {
             steps {
-                echo "Building..."
+                echo "Build..."
+                sh './gradlew classes'
+            }
+        }
+        stage('Code analyze') {
+            steps {
+                echo "Running ktlint..."
+                sh './gradlew ktlint'
             }
         }
 
         stage('Deploy') {
             steps {
                 echo "Deploying..."
+                sh './gradlew bootRun'
             }
         }
     }
